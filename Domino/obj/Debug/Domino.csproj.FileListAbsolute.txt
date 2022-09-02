@@ -1,0 +1,9 @@
+C:\Domino\Domino\Domino\bin\Debug\Domino.exe.config
+C:\Domino\Domino\Domino\bin\Debug\Domino.exe
+C:\Domino\Domino\Domino\bin\Debug\Domino.pdb
+C:\Domino\Domino\Domino\obj\Debug\Domino.csprojResolveAssemblyReference.cache
+C:\Domino\Domino\Domino\obj\Debug\Domino.Form1.resources
+C:\Domino\Domino\Domino\obj\Debug\Domino.Properties.Resources.resources
+C:\Domino\Domino\Domino\obj\Debug\Domino.csproj.GenerateResource.Cache
+C:\Domino\Domino\Domino\obj\Debug\Domino.exe
+C:\Domino\Domino\Domino\obj\Debug\Domino.pdb
