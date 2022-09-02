@@ -1,0 +1,313 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Domino
+{
+    public partial class Form1 : Form
+    {
+        DatosNecesarios datos = new DatosNecesarios();
+        int IA = 0;
+        int Equipo = 0;
+        GameRules<string> Rules;
+        Player<string>[] Players;
+        ProgramedRules<string> RulesImplentations;
+        ProgramedPlayers<string> PlayersImplementations;
+        public Form1()
+        {
+            InitializeComponent();
+            RulesImplentations = GetGameRules<string>.BuildProgramedRules();
+            PlayersImplementations = new ProgramedPlayers<string>();
+        }
+        private void Opciones(object sender,EventArgs e)
+        {
+            IDescribable des = RulesImplentations.Upper(((Button)sender).Name);
+            ((Button)sender).Text = des.Name();
+        }
+        private void Siguiente_Click(object sender, EventArgs e)
+        {
+            datos.faces.Add(textBox1.Text);
+            textBox1.Text = "";
+        }
+        private void Plus_Click(object sender, EventArgs e)
+        {
+            datos.FichasByPlayer += 1;
+            textBox2.Text = Convert.ToString(datos.FichasByPlayer);
+        }
+        private void Less_Click(object sender, EventArgs e)
+        {
+            if (datos.FichasByPlayer == 0)
+            {
+                MessageBox.Show("La cantidad de fichas no puede ser negativa");
+                return;
+            }
+            datos.FichasByPlayer -= 1;
+            textBox2.Text = Convert.ToString(datos.FichasByPlayer);
+        }
+        private void Incluir_Click(object sender, EventArgs e)
+        {
+            datos.IAs.Add(IA);
+            datos.Equipos.Add(Equipo);
+            NumPlayers.Text = Convert.ToString(datos.IAs.Count);
+        }
+        private void PlusIA_Click(object sender, EventArgs e)
+        {
+            if (IA == PlayersImplementations.Types.Count - 1)
+                IA = 0;
+            else
+                IA++;
+            PlayerIA.Text = Convert.ToString(IA);
+        }
+
+        
+        private void PlusTeam_Click(object sender, EventArgs e)
+        {
+            if (Equipo == datos.Equipos.Count + 1)
+                Equipo = 0;
+            else
+                Equipo++;
+            PlayerTeam.Text = Convert.ToString(Equipo);
+        }
+        public Label Informacion;
+        GameRecord<string> record;
+        Button Cara1;
+        Button Cara2;
+        Button FaceMuv1;
+        Button FaceMuv2;
+
+        Timer temporizador;
+        bool TokenDirection = true;
+        Form MyForm;
+        private void Aceptar_Click(object sender, EventArgs e)
+        {
+            string Error;
+            bool OK = Auxiliares<string>.ValidateSttings(datos.faces.ToArray(), datos.IAs.ToArray(), datos.Equipos.ToArray(),
+                datos.FichasByPlayer, datos.IAs.Count,RulesImplentations , out Error, out Players, out Rules);
+            if (!OK)
+            {
+                MessageBox.Show(Error);
+                return;
+            }
+
+            MyForm = new Form();
+            MyForm.Size = new System.Drawing.Size(800, 400);
+
+            Informacion = new Label();
+            Informacion.AutoSize = true;
+            Informacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
+
+
+
+
+            Button Activate = new Button();
+            Activate.Location = new System.Drawing.Point(600, 300);
+            Activate.Click += new System.EventHandler(ActivateTimer);
+            Activate.Text = "Comenzar";
+
+            Button Return = new Button();
+            Return.Location = new System.Drawing.Point(400, 300);
+            Return.Click += new System.EventHandler(CloseForm);
+            Return.Text = "Regresar";
+
+
+            Cara1 = new Button();
+            Cara1.Location = new System.Drawing.Point(310, 150);
+            Cara1.Size = new System.Drawing.Size(89, 71);
+
+            Cara2 = new Button();
+            Cara2.Location = new System.Drawing.Point(395, 150);
+            Cara2.Size = new System.Drawing.Size(89, 71);
+
+            temporizador = new Timer();
+            temporizador.Enabled = false;
+            temporizador.Interval = 2;
+            temporizador.Tick += new System.EventHandler(ModificateInformation);
+
+            Game<string> game = new Game<string>();
+            record = game.Single(Rules, Players);
+
+
+            FaceMuv1 = new Button();
+            FaceMuv1.Visible = false;
+            FaceMuv1.Size = new System.Drawing.Size(89, 71);
+            FaceMuv1.Location = new System.Drawing.Point(0, 135);
+
+            FaceMuv2 = new Button();
+            FaceMuv2.Visible = false;
+            FaceMuv2.Size = new System.Drawing.Size(89, 71);
+            FaceMuv2.Location = new System.Drawing.Point(0, 200);
+            
+            
+            
+
+            MyForm.Controls.Add(Informacion);
+            MyForm.Controls.Add(Return);
+            MyForm.Controls.Add(Activate);
+            MyForm.Controls.Add(Cara1);
+            MyForm.Controls.Add(Cara2);
+            MyForm.Controls.Add(FaceMuv1);
+            MyForm.Controls.Add(FaceMuv2);
+
+            MyForm.Show();
+           
+
+
+        }
+        private void ActivateMovementTimer()
+        {
+            int index = record.index < record.CarasDisponibles.Count - 1 ? record.index : record.CarasDisponibles.Count - 1;
+        
+            Cara1.Text = record.CarasDisponibles[index].Item1;
+            Cara2.Text = record.CarasDisponibles[index].Item2;
+            record.index++;
+        }
+        private void CloseForm(object sender, EventArgs e)
+        {
+            Equipo = 0;
+
+            temporizador.Enabled = false;
+            datos.IAs.Clear();
+            datos.Equipos.Clear();
+            MyForm.Close();
+
+        }
+        private void ActivateTimer(object sender, EventArgs e)
+        {
+            temporizador.Enabled = true;
+        }
+        private void ModificateInformation(object sender, EventArgs e)
+        {
+            
+            if (record.index == record.Registro.Count)
+            {
+                ((Timer)sender).Enabled = false;
+                Informacion.Text = record.Mensajes[record.Mensajes.Count-1];
+                record.index = 0;
+                return;
+            }
+            Informacion.Text = record.Mensajes[record.index];
+            
+            if (record.Registro[record.index].Item2.Type != record.Registro[record.index].Item2.Pass)
+            {
+                FaceMuv1.Visible = true;
+                FaceMuv2.Visible = true;
+                FaceMuv1.Text = Convert.ToString(record.Registro[record.index].Item2.InHand.FirstFace);
+                FaceMuv2.Text = Convert.ToString(record.Registro[record.index].Item2.InHand.SecondFace);
+            }
+            
+            if (TokenDirection)
+            {
+                FaceMuv1.Left += 1;
+                FaceMuv2.Left += 1;
+            }
+            else
+            {
+                FaceMuv1.Left -= 1;
+                FaceMuv2.Left -= 1;
+            }
+
+            if (FaceMuv1.Left == 220 || FaceMuv1.Left == 480)
+            {
+                FaceMuv1.Visible = false;
+                FaceMuv2.Visible = false;
+                ActivateMovementTimer();
+                if (record.index + 1 < record.Registro.Count)
+                {
+                    if (record.Registro[record.index].Item2.IndexOnTable == 0)
+                    {
+                        FaceMuv1.Location = new System.Drawing.Point(0, 135);
+                        FaceMuv2.Location = new System.Drawing.Point(0, 200);
+                        TokenDirection = true;
+                    }
+                    else
+                    {
+                        FaceMuv1.Location = new System.Drawing.Point(700, 135);
+                        FaceMuv2.Location = new System.Drawing.Point(700, 200);
+                        TokenDirection = false;
+                    }
+                }
+
+            }
+
+
+            
+        }
+
+        private void DNine_Click(object sender, EventArgs e)
+        {
+            datos.faces.Clear();
+            string[] l = { "0","1", "2", "3", "4", "5", "6", "7", "8","9" };
+            datos.faces.AddRange(l.ToList());
+        }
+
+        private void DSix_Click(object sender, EventArgs e)
+        {
+            datos.faces.Clear();
+            string[] l = { "0", "1", "2", "3", "4", "5", "6" };
+            datos.faces.AddRange(l.ToList());
+        }
+
+        private void Eliminar_Click(object sender, EventArgs e)
+        {
+            if (datos.IAs.Count != 0)
+            {
+                datos.IAs.RemoveAt(datos.IAs.Count - 1);
+                datos.Equipos.RemoveAt(datos.Equipos.Count - 1);
+                NumPlayers.Text = Convert.ToString(datos.IAs.Count);
+            }
+        }
+        private void ShowInformation(object sender, EventArgs e)
+        {
+            switch(((Button)sender).Name)
+            {
+                case "Inf1":
+                    ShowInformation(RulesImplentations.ValidateMove);
+                    break;
+                case "Inf2":
+                    ShowInformation(RulesImplentations.Order);
+                    break;
+                case "Inf3":
+                    ShowInformation(RulesImplentations.ValorateToken);
+                    break;
+                case "Inf4":
+                    ShowInformation(RulesImplentations.GameFinisher);
+                    break;
+                case "Inf5":
+                    ShowInformation(RulesImplentations.Result);
+                    break;
+                case "Inf6":
+                    ShowInformation(PlayersImplementations.Types[IA]);
+                    break;
+            }
+        }
+        private void ShowInformation(IDescribable d)
+        {
+            MessageBox.Show(d.Description(), d.Name());
+        }
+        
+    }
+}
+public class GameRecord<T>
+{
+    public List<string> Mensajes = new List<string>();
+    public List<Tuple<T, T>> CarasDisponibles = new List<Tuple<T, T>>();
+    public List<Tuple<Player<T>, Move<T>>> Registro = new List<Tuple<Player<T>, Move<T>>>();
+    public int index = 0;
+}
+
+public class DatosNecesarios
+{
+    
+    public List<string> faces = new List<string>();
+    public int FichasByPlayer = 0;
+    public List<int> IAs = new List<int>();
+    public List<int> Equipos = new List<int>();
+}
+
