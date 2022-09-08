@@ -7,10 +7,17 @@ using System.Threading.Tasks;
 /*
     clase abstracta que sirve de base para los jugadores, estos se diferencian solo en su
     diferente forma de escoger una jugada de entre un conjunto de jugadas validas
+<<<<<<< HEAD
     Estos jugadores funcionan recibiendo un array de jugadas validas. Crean un array numerico que indica el score que le dan a cada jugada.
     Luego usan uno o varios objetos strategy para modificar esos score y devolver la jugada de score mas alto
 */
 public class Player<T>:IDescribable
+=======
+    Estos jugadores funcionan recibiendo un array de jugadas validas. Crean un array numerico que indica el score que le dana cada jugada.
+    Luego usan uno o varios objetos strategy para modificar esos score y devolver la jugada de score mas alto
+*/
+public abstract class Player<T>:IDescribable
+>>>>>>> Domino-Project/Domino
 {
     public int name { get; protected set; }
     public List<Token<T>> Mano { get; protected set; }
@@ -58,6 +65,7 @@ public class Player<T>:IDescribable
         Array.Sort(scores, PosiblesMoves);
         return PosiblesMoves[PosiblesMoves.Length - 1];
     }
+<<<<<<< HEAD
     public virtual Player<T> GetClon()
     {
         Player<T> Clon = new Player<T>(name, Team, Strategies);
@@ -66,6 +74,8 @@ public class Player<T>:IDescribable
         Clon.Mano = HandClon;
         return Clon;
     }
+=======
+>>>>>>> Domino-Project/Domino
 }
 
 public class PlayerRandom<T> : Player<T>

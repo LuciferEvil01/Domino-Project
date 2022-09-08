@@ -33,10 +33,15 @@ public class Token<T>
         string Name = "";
         for (int i = 0; i < Caras.Length; i++)
         {
+<<<<<<< HEAD
             Name += Convert.ToString(Caras[i]);
 
             if (i!=Caras.Length-1)
                 Name += "/";
+=======
+            Name += Convert.ToString(Caras[i]);
+            Name += "/";
+>>>>>>> Domino-Project/Domino
         }
         return Name;
     }

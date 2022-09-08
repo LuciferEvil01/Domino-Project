@@ -80,8 +80,12 @@ namespace Domino
         Button Cara2;
         Button FaceMuv1;
         Button FaceMuv2;
+<<<<<<< HEAD
         Label PlayerIndicator;
         ListBox Tokens;
+=======
+
+>>>>>>> Domino-Project/Domino
         Timer temporizador;
         bool TokenDirection = true;
         Form MyForm;
@@ -97,7 +101,11 @@ namespace Domino
             }
 
             MyForm = new Form();
+<<<<<<< HEAD
             MyForm.Size = new System.Drawing.Size(800, 550);
+=======
+            MyForm.Size = new System.Drawing.Size(800, 400);
+>>>>>>> Domino-Project/Domino
 
             Informacion = new Label();
             Informacion.AutoSize = true;
@@ -108,12 +116,21 @@ namespace Domino
 
 
             Button Activate = new Button();
+<<<<<<< HEAD
             Activate.Location = new System.Drawing.Point(400, 300);
             Activate.Click += new System.EventHandler(PlayPauseTimer);
             Activate.Text = "Cont./Parar";
 
             Button Return = new Button();
             Return.Location = new System.Drawing.Point(300, 300);
+=======
+            Activate.Location = new System.Drawing.Point(600, 300);
+            Activate.Click += new System.EventHandler(ActivateTimer);
+            Activate.Text = "Comenzar";
+
+            Button Return = new Button();
+            Return.Location = new System.Drawing.Point(400, 300);
+>>>>>>> Domino-Project/Domino
             Return.Click += new System.EventHandler(CloseForm);
             Return.Text = "Regresar";
 
@@ -126,6 +143,7 @@ namespace Domino
             Cara2.Location = new System.Drawing.Point(395, 150);
             Cara2.Size = new System.Drawing.Size(89, 71);
 
+<<<<<<< HEAD
             PlayerIndicator = new Label();
             PlayerIndicator.Text = "";
             PlayerIndicator.Location = new System.Drawing.Point(50, 300);
@@ -135,6 +153,8 @@ namespace Domino
             Tokens.FormattingEnabled = true;
             Tokens.Size = new System.Drawing.Size(120, 147);
 
+=======
+>>>>>>> Domino-Project/Domino
             temporizador = new Timer();
             temporizador.Enabled = false;
             temporizador.Interval = 2;
@@ -153,7 +173,12 @@ namespace Domino
             FaceMuv2.Visible = false;
             FaceMuv2.Size = new System.Drawing.Size(89, 71);
             FaceMuv2.Location = new System.Drawing.Point(0, 200);
+<<<<<<< HEAD
 
+=======
+            
+            
+>>>>>>> Domino-Project/Domino
             
 
             MyForm.Controls.Add(Informacion);
@@ -163,34 +188,57 @@ namespace Domino
             MyForm.Controls.Add(Cara2);
             MyForm.Controls.Add(FaceMuv1);
             MyForm.Controls.Add(FaceMuv2);
+<<<<<<< HEAD
             MyForm.Controls.Add(PlayerIndicator);
             MyForm.Controls.Add(Tokens);
+=======
+
+>>>>>>> Domino-Project/Domino
             MyForm.Show();
            
 
 
         }
+<<<<<<< HEAD
         private void UpdateTable()
+=======
+        private void ActivateMovementTimer()
+>>>>>>> Domino-Project/Domino
         {
             int index = record.index < record.CarasDisponibles.Count - 1 ? record.index : record.CarasDisponibles.Count - 1;
         
             Cara1.Text = record.CarasDisponibles[index].Item1;
             Cara2.Text = record.CarasDisponibles[index].Item2;
+<<<<<<< HEAD
         }
         
         private void CloseForm(object sender, EventArgs e)
         {
             Equipo = 0;
+=======
+            record.index++;
+        }
+        private void CloseForm(object sender, EventArgs e)
+        {
+            Equipo = 0;
+
+>>>>>>> Domino-Project/Domino
             temporizador.Enabled = false;
             datos.IAs.Clear();
             datos.Equipos.Clear();
             MyForm.Close();
 
         }
+<<<<<<< HEAD
         private void PlayPauseTimer(object sender, EventArgs e)
         {
             ShowInformation();
             temporizador.Enabled = !temporizador.Enabled;
+=======
+        private void ActivateTimer(object sender, EventArgs e)
+        {
+            temporizador.Enabled = true;
+>>>>>>> Domino-Project/Domino
         }
         private void ModificateInformation(object sender, EventArgs e)
         {
@@ -202,8 +250,13 @@ namespace Domino
                 record.index = 0;
                 return;
             }
+<<<<<<< HEAD
             
 
+=======
+            Informacion.Text = record.Mensajes[record.index];
+            
+>>>>>>> Domino-Project/Domino
             if (record.Registro[record.index].Item2.Type != record.Registro[record.index].Item2.Pass)
             {
                 FaceMuv1.Visible = true;
@@ -227,11 +280,16 @@ namespace Domino
             {
                 FaceMuv1.Visible = false;
                 FaceMuv2.Visible = false;
+<<<<<<< HEAD
                 UpdateTable();
                 record.index++;
                 ShowInformation();
 
                 if (record.index < record.Registro.Count)
+=======
+                ActivateMovementTimer();
+                if (record.index + 1 < record.Registro.Count)
+>>>>>>> Domino-Project/Domino
                 {
                     if (record.Registro[record.index].Item2.IndexOnTable == 0)
                     {
@@ -252,6 +310,7 @@ namespace Domino
 
             
         }
+<<<<<<< HEAD
         private void ShowInformation()
         {
             if (record.index == record.Registro.Count)
@@ -267,6 +326,8 @@ namespace Domino
             Tokens.Items.Clear();
             Tokens.Items.AddRange(TokensName);
         }
+=======
+>>>>>>> Domino-Project/Domino
 
         private void DNine_Click(object sender, EventArgs e)
         {
@@ -319,6 +380,10 @@ namespace Domino
         {
             MessageBox.Show(d.Description(), d.Name());
         }
+<<<<<<< HEAD
+=======
+        
+>>>>>>> Domino-Project/Domino
     }
 }
 public class GameRecord<T>

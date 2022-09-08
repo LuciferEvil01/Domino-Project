@@ -30,7 +30,11 @@ public class BaseState<T>
 
     public virtual void Actualizar(Player<T> player, Move<T> Move, GameRules<T> rules, GameRecord<T> Record)
     {
+<<<<<<< HEAD
         Registro.Add(new Tuple<Player<T>, Move<T>>(player.GetClon(), Move));
+=======
+        Registro.Add(new Tuple<Player<T>, Move<T>>(player, Move));
+>>>>>>> Domino-Project/Domino
 
         rules.Ordenador.Actualizar(Move, player);
         string mensaje = "";
